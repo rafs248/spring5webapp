@@ -28,21 +28,34 @@ public class BootStrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        Publisher globalPub = new Publisher("Global Publishing", "37 High Street", "Seattle", "California", "Y6T 8D3");
+        publisherRepository.save(globalPub);
+        Publisher univ = new Publisher("Universal Publishing", "38 High Street", "Seattle", "California", "Y7T 8D3");
+        publisherRepository.save(univ);
+        Publisher pol = new Publisher("Poland Publishing", "39 High Street", "Seattle", "California", "Y6A 8D3");
+        publisherRepository.save(pol);
+
         Author eric = new Author("Eric", "Evans");
         Book ddd = new Book("Domain Driven Design", "123123");
         eric.getBooks().add(ddd);
         ddd.getAuthors().add(eric);
+        ddd.setPublisher(globalPub);
+        globalPub.getBooks().add(ddd);
 
         authorRepository.save(eric);
         bookRepository.save(ddd);
+        publisherRepository.save(globalPub);
 
         Author rod = new Author("Rod", "Johnson");
         Book noEJB = new Book("J2EE Development without EJB", "3939459459");
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
+        noEJB.setPublisher(globalPub);
+        globalPub.getBooks().add(noEJB);
 
         authorRepository.save(rod);
         bookRepository.save(noEJB);
+        publisherRepository.save(globalPub);
 
         System.out.println("Started in Bootstrap");
         System.out.println("Number of Books: " + bookRepository.count());
@@ -52,15 +65,8 @@ public class BootStrapData implements CommandLineRunner {
             System.out.println("bookId: "+book.getId());
         }
 
-        Publisher globalPub = new Publisher("Global Publishing", "37 High Street", "Seattle", "California", "Y6T 8D3");
-        publisherRepository.save(globalPub);
-
-        Publisher univ = new Publisher("Universal Publishing", "38 High Street", "Seattle", "California", "Y7T 8D3");
-        publisherRepository.save(univ);
-
-        Publisher pol = new Publisher("Poland Publishing", "39 High Street", "Seattle", "California", "Y6A 8D3");
-        publisherRepository.save(pol);
 
         System.out.println("Number of Publishers: " + publisherRepository.count());
+        System.out.println("Publisher Books: " + globalPub.getBooks().size());
     }
 }
